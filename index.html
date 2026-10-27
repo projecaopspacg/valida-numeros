@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação de Cartela - WhatsApp</title>
+    <!-- Fonte Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --wa-green: #25D366;
+            --wa-green-dark: #075E54;
+            --wa-green-deep: #128C7E;
+            --bg-main: #0b141a;
+            --bg-card: #111b21;
+            --bg-input: #202c33;
+            --border-color: #2a3942;
+            --text-primary: #e9edef;
+            --text-secondary: #8696a0;
+            --text-muted: #667781;
+            --accent: #00a884;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 12px;
+            background-image: radial-gradient(circle at 50% 0%, #112328 0%, #0b141a 75%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 560px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: var(--bg-input);
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .header-title h1 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-title .cartela-badge {
+            background-color: rgba(0, 168, 132, 0.2);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .header-title p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .form-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: -4px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.92rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0, 168, 132, 0.2);
+        }
+
+        .preview-box {
+            background: #0b141a;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            position: relative;
+            background-image: radial-gradient(#1f2c34 1px, transparent 1px);
+            background-size: 12px 12px;
+        }
+
+        .preview-header {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .preview-content {
+            background: #202c33;
+            border-radius: 0 8px 8px 8px;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #e9edef;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border-left: 3px solid var(--accent);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .btn-submit {
+            background-color: var(--wa-green);
+            color: #0b141a;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+            text-decoration: none;
+        }
+
+        .btn-submit:hover {
+            background-color: #1fbe5c;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+        }
+
+        .btn-submit svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            padding: 12px 24px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <div class="header-title">
+                <h1>
+                    Validação de Cartela 
+                    <span class="cartela-badge" id="titleCartela">#1</span>
+                </h1>
+                <p>Preencha os dados do envio para o WhatsApp</p>
+            </div>
+        </div>
+
+        <form id="waForm" class="form-body" onsubmit="event.preventDefault(); enviarWhatsApp();">
+            
+            <!-- CAMPOS OCULTOS DE SISTEMA -->
+            <input type="hidden" id="telDestino" value="5567984662404">
+            <input type="hidden" id="cartela" value="1">
+            <input type="hidden" id="dataHora" value="">
+            <input type="hidden" id="chave" value="">
+
+            <!-- CAMPOS VISÍVEIS DE PREENCHIMENTO -->
+            <div class="section-label">Dados do Envio</div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="nomeComprador">Nome do Comprador</label>
+                    <input type="text" id="nomeComprador" placeholder="Ex: João Silva" required autofocus>
+                </div>
+                <div class="input-group">
+                    <label for="telComprador">Telefone Comprador</label>
+                    <input type="tel" id="telComprador" placeholder="(67) 99999-9999" required>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="nomeVendedor">Nome do Vendedor</label>
+                    <input type="text" id="nomeVendedor" placeholder="Ex: Maria Souza" required>
+                </div>
+                <div class="input-group">
+                    <label for="telVendedor">Telefone Vendedor</label>
+                    <input type="tel" id="telVendedor" placeholder="(67) 98888-8888">
+                </div>
+            </div>
+
+            <div class="preview-box">
+                <div class="preview-header">
+                    <span>💬 PRÉVIA DA MENSAGEM DO WHATSAPP</span>
+                </div>
+                <div class="preview-content" id="messagePreview">...</div>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <svg viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+                Enviar para o WhatsApp
+            </button>
+        </form>
+
+        <div class="footer-note">
+            Este formulário gera um link direto codificado sem limites de uso.
+        </div>
+    </div>
+
+    <script>
+        // Função para formatar a data/hora atual (dd/MM/yyyy HH:mm)
+        function obterDataHoraAtual() {
+            const agora = new Date();
+            const dia = String(agora.getDate()).padStart(2, '0');
+            const mes = String(agora.getMonth() + 1).padStart(2, '0');
+            const ano = agora.getFullYear();
+            const horas = String(agora.getHours()).padStart(2, '0');
+            const minutos = String(agora.getMinutes()).padStart(2, '0');
+            return `${dia}/${mes}/${ano} ${horas}:${minutos}`;
+        }
+
+        // Gera um hash SHA-256 de exemplo caso nenhum seja informado
+        async function gerarHashExemplo() {
+            const textoRandom = 'CARTELA_' + Date.now() + '_' + Math.random();
+            const msgUint8 = new TextEncoder().encode(textoRandom);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 32).toUpperCase();
+        }
+
+        // Atualiza a badge da cartela no título superior
+        function atualizarTituloCartela(numCartela) {
+            const badge = document.getElementById('titleCartela');
+            if (badge) {
+                badge.innerText = `#${numCartela}`;
+            }
+        }
+
+        // Lê parâmetros da URL (?destino=...&cartela=...&chave=...)
+        function lerParametrosURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            const destino = urlParams.get('destino') || urlParams.get('telDestino');
+            let cartela = urlParams.get('cartela') || urlParams.get('numeroCartela');
+            const chave = urlParams.get('chave');
+
+            if (destino) document.getElementById('telDestino').value = destino;
+            
+            if (cartela) {
+                // Remove zeros à esquerda se existirem, mantendo valor numérico simples
+                const cartelaLimpa = cartela.replace(/^0+(?=\d)/, '');
+                document.getElementById('cartela').value = cartelaLimpa;
+                atualizarTituloCartela(cartelaLimpa);
+            } else {
+                atualizarTituloCartela(document.getElementById('cartela').value);
+            }
+            
+            if (chave) document.getElementById('chave').value = chave;
+        }
+
+        // Constrói o texto da mensagem
+        function construirMensagem() {
+            const nomeComprador = document.getElementById('nomeComprador').value.trim() || '[Nome do Comprador]';
+            const telComprador  = document.getElementById('telComprador').value.trim() || '[Tel Comprador]';
+            const nomeVendedor  = document.getElementById('nomeVendedor').value.trim() || '[Nome do Vendedor]';
+            const telVendedor   = document.getElementById('telVendedor').value.trim() || '[Tel Vendedor]';
+            const cartela       = document.getElementById('cartela').value.trim();
+            const chave         = document.getElementById('chave').value.trim();
+            const dataHora      = document.getElementById('dataHora').value.trim();
+
+            return `🎟️ *VALIDAÇÃO DE CARTELA*\n` +
+                   `----------------------------------------\n` +
+                   `👤 *Comprador:* ${nomeComprador}\n` +
+                   `📞 *Tel Comprador:* ${telComprador}\n` +
+                   `🤝 *Vendedor:* ${nomeVendedor}\n` +
+                   `📱 *Tel Vendedor:* ${telVendedor}\n` +
+                   `----------------------------------------\n` +
+                   `🏷️ *Cartela:* ${cartela}\n` +
+                   `🔑 *Chave:* ${chave}\n` +
+                   `📅 *Data/Hora:* ${dataHora}`;
+        }
+
+        // Atualiza a prévia em tempo real
+        function atualizarPrevia() {
+            const texto = construirMensagem();
+            document.getElementById('messagePreview').innerText = texto;
+        }
+
+        // Formata e redireciona para o WhatsApp
+        function enviarWhatsApp() {
+            const telDestino = document.getElementById('telDestino').value.replace(/\D/g, '');
+            const texto = construirMensagem();
+            const textoCodificado = encodeURIComponent(texto);
+            const urlWhatsApp = `https://api.whatsapp.com/send?phone=${telDestino}&text=${textoCodificado}`;
+            
+            window.open(urlWhatsApp, '_blank');
+        }
+
+        // Aplica máscaras simples para telefones
+        function aplicarMascaraTelefone(input) {
+            input.addEventListener('input', (e) => {
+                let v = e.target.value.replace(/\D/g, '');
+                if (v.length > 11) v = v.substring(0, 11);
+                
+                if (v.length > 10) {
+                    v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+                } else if (v.length > 5) {
+                    v = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+                } else if (v.length > 2) {
+                    v = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+                }
+                e.target.value = v;
+                atualizarPrevia();
+            });
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Garante o foco no campo Nome do Comprador
+            const campoNomeComprador = document.getElementById('nomeComprador');
+            if (campoNomeComprador) {
+                campoNomeComprador.focus();
+            }
+
+            document.getElementById('dataHora').value = obterDataHoraAtual();
+            
+            // Define chave inicial caso não venha via URL
+            const hashPadrao = await gerarHashExemplo();
+            document.getElementById('chave').value = hashPadrao;
+
+            // Lê parâmetros de URL (se fornecidos, sobrescrevem os padrões)
+            lerParametrosURL();
+
+            // Ativa máscaras e ouvintes de evento
+            aplicarMascaraTelefone(document.getElementById('telComprador'));
+            aplicarMascaraTelefone(document.getElementById('telVendedor'));
+
+            const campos = ['nomeComprador', 'telComprador', 'nomeVendedor', 'telVendedor', 'cartela', 'chave', 'telDestino', 'dataHora'];
+            campos.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', atualizarPrevia);
+                    el.addEventListener('change', atualizarPrevia);
+                    el.addEventListener('keyup', atualizarPrevia);
+                }
+            });
+
+            atualizarPrevia();
+        });
+    </script>
+</body>
+</html>
